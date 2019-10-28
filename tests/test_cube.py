@@ -26,5 +26,5 @@ def test_mul():
     assert cube_c * cube_d > 0.65  # Large overlap between HOMO and LUMO
     assert (
         cube_c * cube_d > cube_a * cube_b
-    )  # and this overlap is smaller than in AlPMOF
+    )  # and the overlap in MOF74 is larger than in AlPMOF
 
