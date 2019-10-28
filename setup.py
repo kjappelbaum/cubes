@@ -1,13 +1,16 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     requirements = f.read().splitlines()
-    
+
 setup(
-    name="Cubes",
+    name="cube",
     version="0.1dev",
-    packages=["cube"],
+    packages=find_packages(),
     license="MIT",
-     install_requires=requirements,
+    install_requires=requirements,
+    extras_require={
+        "develop": ["pytest", "pre-commit", "black", "prospector", "pylint"]
+    },
     long_description=open("README.md").read(),
 )
