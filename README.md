@@ -11,6 +11,8 @@ Small class to perform 'efficient' arithmetics with cube files.
 overlapintegral <cubefile1> <cubefile2> --spatial_overlap/--overlap_integral
 ```
 
+If no option is selected it will return both the overlap integral and the spatial overlap.
+
 ## Installation
 
 ```bash
