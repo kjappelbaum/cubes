@@ -5,8 +5,14 @@
 
 Small class to perform 'efficient' arithmetics with cube files.
 
-
 ## Usage
+
 ```bash
 overlapintegral <cubefile1> <cubefile2> --spatial_overlap/--overlap_integral
+```
+
+## Installation
+
+```bash
+pip install git+https://github.com/kjappelbaum/cubes.git
 ```
