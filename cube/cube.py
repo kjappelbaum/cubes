@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import os
 import numpy as np
 from numba import jit, float32
+from six.moves import map
+from six.moves import range
 
 
 class Cube:
@@ -10,15 +14,15 @@ class Cube:
         if os.path.isfile(cubefile0):
             self.read_cube(cubefile0)
         else:
-            raise FileNotFoundError("Did not find cube file")
+            raise FileNotFoundError('Did not find cube file')
 
     def read_cube(self, fname):
         """
-        Method to read cube file. Just needs the filename. 
+        Method to read cube file. Just needs the filename.
         Stolen from https://github.com/funkymunkycool/Cube-Toolz/blob/master/cube_tools.py
         """
 
-        with open(fname, "r") as fin:
+        with open(fname, 'r') as fin:
             self.filename = fname
             self.comment1 = fin.readline()  # Save 1st comment
             self.comment2 = fin.readline()  # Save 2nd comment
@@ -44,7 +48,7 @@ class Cube:
             )
             self.atoms = []
             self.atomsXYZ = []
-            for atom in range(self.natoms):
+            for _ in range(self.natoms):
                 line = fin.readline().split()
                 self.atoms.append(line[0])
                 self.atomsXYZ.append(list(map(np.float32, [line[2], line[3], line[4]])))
@@ -61,19 +65,18 @@ class Cube:
             # if i != self.NX*self.NY*self.NZ: raise NameError, "FSCK!"
 
             self.dV = np.dot(self.X, np.cross(self.Y, self.Z))
-        return None
 
     def _checks(self, other):
         """Can only perform arithmetics if the cube is for the same structure"""
-        assert self.NX == other.NX, "Number of grid points in x must be the same"
-        assert self.NY == other.NY, "Number of grid points in y must be the same"
-        assert self.NZ == other.NZ, "Number of grid points in z must be the same"
+        assert self.NX == other.NX, 'Number of grid points in x must be the same'
+        assert self.NY == other.NY, 'Number of grid points in y must be the same'
+        assert self.NZ == other.NZ, 'Number of grid points in z must be the same'
 
-        assert self.natoms == other.natoms, "Number of atoms must be the same"
+        assert self.natoms == other.natoms, 'Number of atoms must be the same'
 
-        assert all(self.X == other.X), "X dimension must be the same"
-        assert all(self.Y == other.Y), "Y dimension must be the same"
-        assert all(self.Z == other.Z), "Z dimension must be the same"
+        assert all(self.X == other.X), 'X dimension must be the same'
+        assert all(self.Y == other.Y), 'Y dimension must be the same'
+        assert all(self.Z == other.Z), 'Z dimension must be the same'
 
         assert self.data.shape == other.data.shape
 
@@ -105,5 +108,11 @@ class Cube:
         self._checks(other)
         vol = self.dV
         return Cube._multiply(self.data, other.data, vol)
+
+    def spatial_overlap(self, other):
+        """Return spatial overlap integral"""
+        self._checks(other)
+        vol = self.dV
+        return Cube._multiply(np.abs(self.data), np.abs(other.data), vol)
 
     __rmul__ = __mul__
