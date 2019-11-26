@@ -99,20 +99,26 @@ class Cube:
 
     @staticmethod
     @jit(float32(float32[:, :, :], float32[:, :, :], float32), nopython=True)
+    def _multiply_abs(data0, data1, volume):
+        """Calculate abs overlap integral between two cube arrays"""
+        return np.multiply(np.sum(np.multiply(np.abs(data0), np.abs(data1))), volume)
+
+    @staticmethod
+    @jit(float32(float32[:, :, :], float32[:, :, :], float32), nopython=True)
     def _multiply(data0, data1, volume):
         """Calculate overlap integral between two cube arrays"""
-        return np.multiply(np.sum(np.multiply(np.abs(data0), np.abs(data1))), volume)
+        return np.multiply(np.sum(np.multiply(data0, data1)), volume)
 
     def __mul__(self, other):
         """Return overlap integral"""
         self._checks(other)
         vol = self.dV
-        return Cube._multiply(self.data, other.data, vol)
+        return Cube._multiply_abs(self.data, other.data, vol)
 
     def spatial_overlap(self, other):
         """Return spatial overlap integral"""
         self._checks(other)
         vol = self.dV
-        return Cube._multiply(np.abs(self.data), np.abs(other.data), vol)
+        return Cube._multiply(self.data, other.data, vol)
 
     __rmul__ = __mul__
