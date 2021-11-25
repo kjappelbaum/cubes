@@ -9,8 +9,8 @@ from cube import Cube
 @click.argument('path0', type=click.Path(exists=True))
 @click.argument('path1', type=click.Path(exists=True))
 @click.option('--spatial_overlap', is_flag=True)
-@click.option('--overlap_invergral', is_flag=True)
-def main(path0, path1, spatial_overlap, overlap_invergral):
+@click.option('--overlap_intergral', is_flag=True)
+def main(path0, path1, spatial_overlap, overlap_intergral):
     print('*** Reading cubes ****')
     cube0 = Cube(path0)
     cube1 = Cube(path1)
